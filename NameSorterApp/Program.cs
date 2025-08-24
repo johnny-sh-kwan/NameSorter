@@ -22,10 +22,9 @@ try
         nameSortService.AddLine(line);
     }
 
-    List<Name> sortedNames = nameSortService.SortNames();
-
-    Name.WriteToConsole(sortedNames);
-    Name.WriteToFile(sortedNames, sortedNamesFilePath);
+    nameSortService.SortNames();
+    nameSortService.SortedResultsToConsole();
+    nameSortService.SortedResultsToFile(sortedNamesFilePath);
 }
 catch (FileNotFoundException)
 {

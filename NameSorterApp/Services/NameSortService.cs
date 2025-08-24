@@ -1,11 +1,14 @@
 using System;
+using System.Text;
 using NameSorterApp.Models;
 
 namespace NameSorterApp.Services;
 
 public class NameSortService : INameSortService
 {
-    public List<Name> Names { get; init; } = [];
+    public List<Name> UnsortedNames { get; init; } = [];
+    public List<Name> SortedNames { get; private set; } = [];
+    public bool IsSorted { get; private set; } = false;
 
     public void AddLine(string line)
     {
@@ -14,7 +17,7 @@ public class NameSortService : INameSortService
         {
             string surname = parts.Last();
             List<string> givenNames = parts.Take(parts.Length - 1).ToList();
-            Names.Add(new Name { GivenNames = givenNames, Surname = surname });
+            UnsortedNames.Add(new Name { GivenNames = givenNames, Surname = surname });
         }
         else
         {
@@ -24,8 +27,38 @@ public class NameSortService : INameSortService
 
     public List<Name> SortNames()
     {
-        return Names.OrderBy(n => n.Surname, StringComparer.OrdinalIgnoreCase)
+        SortedNames = UnsortedNames.OrderBy(n => n.Surname, StringComparer.OrdinalIgnoreCase)
                     .ThenBy(n => string.Join(" ", n.GivenNames), StringComparer.OrdinalIgnoreCase)
                     .ToList();
+
+        IsSorted = true;
+        return SortedNames;
+    }
+
+    public void SortedResultsToConsole()
+    {
+        if (!IsSorted)
+            throw new InvalidOperationException("Names must be sorted before displaying results.");
+        
+        foreach (Name name in SortedNames)
+            {
+                Console.WriteLine($"{name}");
+            }
+    }
+
+    public void SortedResultsToFile(string filePath)
+    {
+        if (!IsSorted)
+            throw new InvalidOperationException("Names must be sorted before writing results to file.");
+
+        StringBuilder sb = new();
+        foreach (Name name in SortedNames)
+        {
+            sb.AppendLine(name.ToString());
+        }
+
+        File.WriteAllText(filePath, sb.ToString());
+
+        Console.WriteLine($"\nSorted names written to {filePath}");
     }
 }
