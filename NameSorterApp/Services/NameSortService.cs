@@ -39,11 +39,11 @@ public class NameSortService : INameSortService
     {
         if (!IsSorted)
             throw new InvalidOperationException("Names must be sorted before displaying results.");
-        
+
         foreach (Name name in SortedNames)
-            {
-                Console.WriteLine($"{name}");
-            }
+        {
+            Console.WriteLine($"{name}");
+        }
     }
 
     public void SortedResultsToFile(string filePath)
