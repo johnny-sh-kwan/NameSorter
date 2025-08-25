@@ -27,11 +27,11 @@ jobs:
       run: dotnet restore
 
     - name: Build the project
-      run: dotnet build --no-restore --configuration Release
+      run: dotnet build --no-restore --configuration Debug
 
     # Run tests
     - name: Run unit tests
-      run: dotnet test --no-build --verbosity normal --logger "trx" --configuration Release
+      run: dotnet test --no-build --verbosity normal --logger "trx" --configuration Debug
 
     - name: Upload test results
       uses: actions/upload-artifact@v4
@@ -42,7 +42,7 @@ jobs:
 
     # This step publishes the console app as a self-contained executable to the 'publish' directory.
     - name: Publish the console app
-      run: dotnet publish NameSorterApp/NameSorterApp.csproj --no-build --configuration Release -o publish
+      run: dotnet publish NameSorterApp/NameSorterApp.csproj --no-build --configuration Debug -o publish
 
     # Upload the published app as a build artifact
     - name: Upload a build artifact
