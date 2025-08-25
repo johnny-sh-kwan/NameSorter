@@ -42,7 +42,7 @@ jobs:
 
     # This step publishes the console app as a self-contained executable to the 'publish' directory.
     - name: Publish the console app
-      run: dotnet publish NameSorterApp/NameSorterApp.csproj --no-build --configuration Release -o publish
+      run: dotnet publish ../NameSorterApp/NameSorterApp.csproj --no-build --configuration Release -o publish
 
     # Upload the published app as a build artifact
     - name: Upload a build artifact
