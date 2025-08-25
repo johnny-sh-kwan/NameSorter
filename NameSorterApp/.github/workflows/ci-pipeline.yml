@@ -1,0 +1,52 @@
+name: .NET CI/CD
+
+# Triggered on push and pull request events to the main branch.
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    # The 'actions/checkout' action checks out your repository under $GITHUB_WORKSPACE.
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    # The 'actions/setup-dotnet' action sets up the .NET environment on the runner.
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '9.0.x'
+
+    # Build the project
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Build the project
+      run: dotnet build --no-restore
+
+    # Run tests
+    - name: Run unit tests
+      run: dotnet test --no-build --verbosity normal --logger "trx"
+
+    - name: Upload test results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: test-results-report
+        path: '**/*.trx'
+
+    # This step publishes the console app as a self-contained executable to the 'publish' directory.
+    - name: Publish the console app
+      run: dotnet publish --no-build --configuration Release -o publish
+
+    # Upload the published app as a build artifact
+    - name: Upload a build artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: name-sorter-artifact
+        path: publish
