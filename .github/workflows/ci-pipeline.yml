@@ -27,11 +27,11 @@ jobs:
       run: dotnet restore
 
     - name: Build the project
-      run: dotnet build --no-restore
+      run: dotnet build --no-restore --configuration Release
 
     # Run tests
     - name: Run unit tests
-      run: dotnet test --no-build --verbosity normal --logger "trx"
+      run: dotnet test --no-build --verbosity normal --logger "trx" --configuration Release
 
     - name: Upload test results
       uses: actions/upload-artifact@v4
