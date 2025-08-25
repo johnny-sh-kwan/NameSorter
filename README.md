@@ -9,3 +9,5 @@ Can optionally pass in file name of unsorted names.
 Will ignore any invalid names, eg all lines must contain both given and surname.  
 
 There is a NameSorterTest xUnit test project containing unit tests.
+
+Github actions CI pipeline in .github\workflows
